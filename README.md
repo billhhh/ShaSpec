@@ -56,6 +56,6 @@ python postprocess.py
 
 The folder paths can be modified in `postprocess.py`.
 
-After postprocessing, [online evaluation](https://ipp.cbica.upenn.edu/) is performed. Output folder containing 66 segmentations is required to be uploaded to the site for evaluation.
+After postprocessing, [online evaluation](https://ipp.cbica.upenn.edu/) needed to be performed. Output folder containing 66 segmentations is required to be uploaded to the site for evaluation.
 
 Enjoy!!
