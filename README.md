@@ -20,7 +20,7 @@ The data path can be changed in `datalist/BraTS18/`. There are 4 files in the fo
 
 ## Model Training
 
-Followed the official BraTS2018 settings, the models are trained on training data for a certain iterations and then tested on online evaluation data. Detailed hyper-parameters settings can be found in `run.sh` and in the paper. Note that we empirically found out a lower temperature of random modality dropout is needed at the initial stage of the training as the model performance is not stable and gradually increase the dropout rate. Alternatively, we can perform a warmup with all modalities training as shown in the run.sh script.
+Followed the official BraTS2018 settings, the models are trained on training data for a certain iterations and then tested on online evaluation data. Detailed hyper-parameters settings can be found in `run.sh` and in the paper. Note that we empirically found out a lower temperature of random modality dropout can help at the initial stage of the training as the model performance is not stable and gradually increase the dropout rate. Alternatively, we can perform a warmup with all modalities training as shown in the run.sh script.
 
 For model training, the commandline is:
 
