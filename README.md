@@ -1,4 +1,4 @@
-# ShaSpec
+# ShaSpec - CVPR2023
 
 The official code repository of ShaSpec model from CVPR 2023 [paper](https://arxiv.org/pdf/2307.14126) "Multi-modal Learning with Missing Modality via Shared-Specific Feature Modelling"
 
