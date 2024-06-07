@@ -58,4 +58,16 @@ The folder paths can be modified in `postprocess.py`.
 
 After postprocessing, [online evaluation](https://ipp.cbica.upenn.edu/) needed to be performed. Output folder containing 66 segmentations is required to be uploaded to the site for evaluation.
 
+If you got a chance to use our code, you can cite our paper with the following information:
+
+```
+@inproceedings{wang2023multi,
+  title={Multi-modal learning with missing modality via shared-specific feature modelling},
+  author={Wang, Hu and Chen, Yuanhong and Ma, Congbo and Avery, Jodie and Hull, Louise and Carneiro, Gustavo},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={15878--15887},
+  year={2023}
+}
+```
+
 Enjoy!!
