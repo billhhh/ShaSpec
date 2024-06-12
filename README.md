@@ -8,7 +8,8 @@ The official code repository of ShaSpec model from CVPR 2023 [paper](https://arx
 pip install -r requirements.txt
 ```
 
-For more requirements, please refer to requirements.txt
+For more requirements, please refer to requirements.txt.
+I've also uploaded a conda env file environment.yml, so you can use any of them as you like.
 
 ## Data Preparation
 
