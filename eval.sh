@@ -9,4 +9,4 @@ CUDA_VISIBLE_DEVICES=$1 python eval.py \
 --data_list=BraTS18/BraTS18_test.csv \
 --weight_std=True \
 --restore_from=snapshots/BraTS18_ShaSpec_[80,160,160]_SGD_b1_lr-2_alpha.1_beta.02_trainOnly_rand_mode/final.pth \
---mode=1 > logs/${time}_train_${name}.log
+--mode=0,1,2,3 > logs/${time}_train_${name}.log
