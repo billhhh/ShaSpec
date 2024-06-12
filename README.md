@@ -62,7 +62,7 @@ After postprocessing, [online evaluation](https://ipp.cbica.upenn.edu/) needed t
 
 In order to fit in a single 3090 Memory, the batchsize = 1 is used. So you may encounter the bug "ValueError: Expected more than 1 value per channel when training, got input size torch.Size([1, 256, 1, 1, 1])".
 
-In the casted bug, you should see something like: File "/home/anaconda3/envs/shaspec/lib/python3.9/site-packages/torch/nn/functional.py", line 2077, in instance_norm
+In the bug, you should see something like: File "/home/anaconda3/envs/shaspec/lib/python3.9/site-packages/torch/nn/functional.py", line 2077, in instance_norm
     _verify_batch_size(input.size()). This is caused by the instanceNorm function check if it is batchsize = 1. So we just need to comment this line in the functional.py file into `# _verify_batch_size(input.size())`.
 
 ![ver_batch](https://github.com/billhhh/ShaSpec/assets/7709725/60ffe668-22cc-411b-9bf9-1543c7972688)
