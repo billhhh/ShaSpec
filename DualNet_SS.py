@@ -342,7 +342,6 @@ class DualNet_SS(nn.Module):
     def __init__(self, args, norm_cfg='BN', activation_cfg='LeakyReLU', num_classes=None,
                  weight_std=False, self_att=False, cross_att=False):
         super().__init__()
-        self.do_ds = False
         self.shared_enc = U_Res3D_enc(norm_cfg, activation_cfg, num_classes, weight_std)
         self.shared_dec = U_Res3D_dec(norm_cfg, activation_cfg, num_classes, weight_std)
 
