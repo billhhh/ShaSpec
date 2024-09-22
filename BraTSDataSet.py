@@ -75,13 +75,13 @@ class BraTSDataSet(data.Dataset):
         class_num, img_d, img_h, img_w = label.shape
 
         if random.random() < 0.5:
-            selected_class = np.random.choice(class_num + 1)
+            selected_class = np.random.choice(class_num)
             class_locs = []
             if selected_class != class_num:
                 class_label = label[selected_class]
                 class_locs = np.argwhere(class_label > 0)
 
-            if selected_class == class_num or len(class_locs) == 0:
+            if len(class_locs) == 0:
                 # if no foreground found, then randomly select
                 d0 = random.randint(0, img_d - 0 - self.crop_d)
                 h0 = random.randint(15, img_h - 15 - self.crop_h)
@@ -149,8 +149,6 @@ class BraTSDataSet(data.Dataset):
         scale_flag = False
         if self.scale and np.random.uniform() < 0.5:
             scaler = np.random.uniform(0.9, 1.1)
-        # if self.scale and np.random.uniform() < 0.2:
-        #     scaler = np.random.uniform(0.85, 1.25)
             scale_flag = True
         else:
             scaler = 1
@@ -161,13 +159,13 @@ class BraTSDataSet(data.Dataset):
         class_num, img_d, img_h, img_w = label.shape
 
         if random.random() < 0.5:
-            selected_class = np.random.choice(class_num + 1)
+            selected_class = np.random.choice(class_num)
             class_locs = []
             if selected_class != class_num:
                 class_label = label[selected_class]
                 class_locs = np.argwhere(class_label > 0)
 
-            if selected_class == class_num or len(class_locs) == 0:
+            if len(class_locs) == 0:
                 # if no foreground found, then randomly select
                 d0 = random.randint(0, img_d - 0 - scale_d)
                 h0 = random.randint(15, img_h - 15 - scale_h)
