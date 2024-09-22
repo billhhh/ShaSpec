@@ -2,6 +2,11 @@
 
 The official code repository of ShaSpec model from CVPR 2023 [paper](https://arxiv.org/pdf/2307.14126) "Multi-modal Learning with Missing Modality via Shared-Specific Feature Modelling"
 
+## Updates
+
+22/Sept/2024 Strengthen sample efficiency of locate bbx functions in BraTSDataSet.py. For more details, you can refer to https://github.com/billhhh/ShaSpec/commit/bcd8a14cf3b68b9f9ad286a58a27d3cec20f230e
+
+
 ## Installation
 
 ```commandline
