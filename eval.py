@@ -55,6 +55,72 @@ def pad_image(img, target_size):
     return padded_img
 
 
+def _get_gaussian(patch_size, sigma_scale=1. / 8) -> np.ndarray:
+    tmp = np.zeros(patch_size)
+    center_coords = [i // 2 for i in patch_size]
+    sigmas = [i * sigma_scale for i in patch_size]
+    tmp[tuple(center_coords)] = 1
+    gaussian_importance_map = gaussian_filter(tmp, sigmas, 0, mode='constant', cval=0)
+    gaussian_importance_map = gaussian_importance_map / np.max(gaussian_importance_map) * 1
+    gaussian_importance_map = gaussian_importance_map.astype(np.float32)
+
+    # gaussian_importance_map cannot be 0, otherwise we may end up with nans!
+    gaussian_importance_map[gaussian_importance_map == 0] = np.min(
+        gaussian_importance_map[gaussian_importance_map != 0])
+
+    return gaussian_importance_map
+
+
+def predict_sliding_gaussian(args, net, img_list, tile_size, classes):
+    gaussian_importance_map = _get_gaussian(tile_size, sigma_scale=1. / 8)
+    image, image_res = img_list
+    interp = nn.Upsample(size=tile_size, mode='trilinear', align_corners=True)
+    image_size = image.shape
+    overlap = 1/3
+
+    strideHW = ceil(tile_size[1] * (1 - overlap))
+    strideD = ceil(tile_size[0] * (1 - overlap))
+    tile_deps = int(ceil((image_size[2] - tile_size[0]) / strideD) + 1)
+    tile_rows = int(ceil((image_size[3] - tile_size[1]) / strideHW) + 1)  # strided convolution formula
+    tile_cols = int(ceil((image_size[4] - tile_size[2]) / strideHW) + 1)
+    full_probs = torch.zeros((classes, image_size[2], image_size[3], image_size[4]))
+    count_predictions = torch.zeros((classes, image_size[2], image_size[3], image_size[4]))
+
+    for dep in range(tile_deps):
+        for row in range(tile_rows):
+            for col in range(tile_cols):
+                d1 = int(dep * strideD)
+                y1 = int(row * strideHW)
+                x1 = int(col * strideHW)
+                d2 = min(d1 + tile_size[0], image_size[2])
+                y2 = min(y1 + tile_size[1], image_size[3])
+                x2 = min(x1 + tile_size[2], image_size[4])
+                d1 = max(int(d2 - tile_size[0]), 0)
+                y1 = max(int(y2 - tile_size[1]), 0)
+                x1 = max(int(x2 - tile_size[2]), 0)
+
+                img = image[:, :, d1:d2, y1:y2, x1:x2]
+                img_res = image_res[:, :, d1:d2, y1:y2, x1:x2]
+                padded_img = pad_image(img, tile_size)
+                padded_img_res = pad_image(img_res, tile_size)
+                padded_prediction, _, _ = net(torch.from_numpy(padded_img).cuda(), mode=args.mode)
+                padded_prediction = F.sigmoid(padded_prediction)  # calc sigmoid earlier
+
+                padded_prediction = interp(padded_prediction).cpu().data  # interp
+                padded_prediction = padded_prediction[0].cpu()
+                prediction = padded_prediction[0:img.shape[2],0:img.shape[3], 0:img.shape[4], :]
+                # count_predictions[:, d1:d2, y1:y2, x1:x2] += 1
+                count_predictions[:, d1:d2, y1:y2, x1:x2] += gaussian_importance_map
+                full_probs[:, d1:d2, y1:y2, x1:x2] += prediction
+
+    # average the predictions in the overlapping regions
+    full_probs /= count_predictions
+    # full_probs = torch.sigmoid(full_probs)  # calc sigmoid later
+
+    full_probs = full_probs.numpy().transpose(1,2,3,0)
+    return full_probs
+
+
 def predict_sliding(args, net, img_list, tile_size, classes):
     image, image_res = img_list
     interp = nn.Upsample(size=tile_size, mode='trilinear', align_corners=True)
