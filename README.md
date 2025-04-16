@@ -42,7 +42,7 @@ bash run.sh 0
 
 ## Model Evaluation
 
-For model evaluation, the resume path of the tested model can be specified in the `eval.sh` file. The evaluation can be performed with:
+For model evaluation, the resume path of the tested model can be specified in the `eval.sh` file. This file is for output masks used in online evaluation. But if you would like to validate the model seg performance, please split a few samples in the training set as the validation set. The evaluation can be performed with:
 
 ```commandline
 bash eval.sh [GPU id]
